@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Text, View, FlatList } from 'react-native';
 import { Duration } from 'luxon';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ReminderComponent from './components/Reminder';
 
 interface DurationObject {
   seconds?: number;
@@ -13,7 +14,7 @@ interface DurationObject {
   years?: number;
 }
 
-interface Reminder {
+export interface Reminder {
   title: string;
   interval: DurationObject;
   lastCompletion?: Date;
@@ -50,6 +51,54 @@ const initialReminders: Reminder[] = [
     title: 'Exercise',
     interval: {days: 2},
   },
+  {
+    title: 'Play guitar',
+    interval: {weeks: 1},
+  },
+  {
+    title: 'Read a book',
+    interval: {days: 3},
+  },
+  {
+    title: 'Exercise',
+    interval: {days: 2},
+  },
+  {
+    title: 'Play guitar',
+    interval: {weeks: 1},
+  },
+  {
+    title: 'Read a book',
+    interval: {days: 3},
+  },
+  {
+    title: 'Exercise',
+    interval: {days: 2},
+  },
+  {
+    title: 'Play guitar',
+    interval: {weeks: 1},
+  },
+  {
+    title: 'Read a book',
+    interval: {days: 3},
+  },
+  {
+    title: 'Exercise',
+    interval: {days: 2},
+  },
+  {
+    title: 'Play guitar',
+    interval: {weeks: 1},
+  },
+  {
+    title: 'Read a book',
+    interval: {days: 3},
+  },
+  {
+    title: 'Exercise',
+    interval: {days: 2},
+  },
 ];
 
 export default function App() {
@@ -57,7 +106,7 @@ export default function App() {
 
   useEffect(() => {
     const getReminders = async () => {
-      // await storeData('reminders', initialReminders);
+      await storeData('reminders', initialReminders);
       const storedReminders = await getData('reminders');
       // console.log(storedReminders);
       setReminders(storedReminders);
@@ -72,11 +121,7 @@ export default function App() {
         <FlatList
           data={reminders}
           renderItem={({item: reminder, index}) => (
-            <View key={index}>
-              <Text style={{color: 'white'}}>
-                {reminder.title + ' -- interval: ' + Duration.fromObject(reminder.interval).as('days') + ' days'}
-              </Text>
-            </View>
+            <ReminderComponent {...reminder} key={index} />
           )}
         />
       </View>
