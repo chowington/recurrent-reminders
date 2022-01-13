@@ -24,10 +24,12 @@ const getData = async (key: string) => {
 export const RemindersContext = createContext({
   reminders: [],
   addReminder: (props: Omit<ReminderProps, 'id'>) => {},
+  deleteReminder: (id: string) => {},
 });
 
 const RemindersProvider = ({ children }) => {
   const [reminders, setReminders] = useState<ReminderProps[]>([]);
+
   const addReminder = (props: Omit<ReminderProps, 'id'>) => {
     const newReminder = {
       id: uuid.v4() as string,
@@ -38,6 +40,14 @@ const RemindersProvider = ({ children }) => {
       .then(() => getData('reminders')
         .then((value) => setReminders(value)))
       .catch(() => console.error('Error: Could not add new reminder'));
+  }
+
+  const deleteReminder = (id: string) => {
+    const newReminders = reminders.filter((reminder) => reminder.id !== id);
+    storeData('reminders', newReminders)
+    .then(() => getData('reminders')
+      .then((value) => setReminders(value)))
+    .catch(() => console.error('Error: Could not delete reminder'));
   }
 
   useEffect(() => {
@@ -57,6 +67,7 @@ const RemindersProvider = ({ children }) => {
       value={{
         reminders,
         addReminder,
+        deleteReminder,
       }}
     >
       {children}

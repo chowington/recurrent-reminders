@@ -20,6 +20,10 @@ export interface ReminderProps {
   lastCompletion?: string;
 }
 
+interface ReminderComponentProps extends ReminderProps {
+  onLongPress: () => void;
+}
+
 const getBestUnit = (duration: Duration) => {
   for (const timeUnit of durationUnits) {
     const result = duration[timeUnit] as number;
@@ -35,16 +39,14 @@ const getDueDate = (reminder: ReminderProps) => {
 
 const onPress = () => {};
 
-export default function Reminder(props: ReminderProps) {
-  // console.log(props);
-  const intervalDuration = Duration.fromObject(props.interval);
-  // console.log(intervalDuration);
+export default function Reminder({id, title, interval, lastCompletion, onLongPress}: ReminderComponentProps) {
+  const intervalDuration = Duration.fromObject(interval);
   const durationBestUnit = getBestUnit(intervalDuration);
-  // console.log(durationBestUnit);
 
   return (
     <Pressable
       onPress={onPress}
+      onLongPress={onLongPress}
       android_ripple={{color: 'black'}}
       style={{
         margin: 5,
@@ -53,20 +55,20 @@ export default function Reminder(props: ReminderProps) {
         borderRadius: 15,
       }}
     >
-      <Text style={{color: 'white', fontSize: 20}}>{props.title}</Text>
+      <Text style={{color: 'white', fontSize: 20}}>{title}</Text>
       <View style={{margin: 2, flex: 1, flexDirection: 'row'}}>
         <View style={{marginRight: 15}}>
           <FontAwesomeIcon icon={faClock} style={{color: 'white', marginRight: 5}}/>
-          <Text style={{color: 'white'}}>Due: {getDueDate(props).toLocaleString()}</Text>
+          <Text style={{color: 'white'}}>Due: {getDueDate({id, title, interval, lastCompletion}).toLocaleString()}</Text>
         </View>
         <View style={{marginRight: 15}}>
           <FontAwesomeIcon icon={faHistory} style={{color: 'white', marginRight: 5}}/>
           <Text style={{color: 'white'}}>{intervalDuration.as(durationBestUnit) + ' ' + durationBestUnit}</Text>
         </View>
-        {props.lastCompletion && (
+        {lastCompletion && (
           <View style={{marginRight: 15}}>
             <FontAwesomeIcon icon={faBackspace} style={{color: 'white', marginRight: 5}}/>
-            <Text style={{color: 'white'}}>{props.lastCompletion}</Text>
+            <Text style={{color: 'white'}}>{lastCompletion}</Text>
           </View>
         )}
       </View>
