@@ -1,4 +1,4 @@
-import { Text, View, Pressable } from 'react-native';
+import { Text, View, Pressable, StyleSheet } from 'react-native';
 import { DateTime, Duration, DurationLikeObject, DurationUnit } from 'luxon';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
@@ -60,21 +60,16 @@ export default function Reminder({
       onPress={onPress}
       onLongPress={onLongPress}
       android_ripple={{ color: 'black' }}
-      style={{
-        margin: 5,
-        padding: 10,
-        backgroundColor: 'blue',
-        borderRadius: 15,
-      }}
+      style={styles.reminderPressable}
     >
-      <Text style={{ color: 'white', fontSize: 20 }}>{title}</Text>
+      <Text style={{ ...styles.reminderText, fontSize: 20 }}>{title}</Text>
       <View style={{ margin: 2, flex: 1, flexDirection: 'row' }}>
-        <View style={{ marginRight: 15 }}>
+        <View style={styles.iconLabel}>
           <FontAwesomeIcon
             icon={faClock}
-            style={{ color: 'white', marginRight: 5 }}
+            style={{ ...styles.reminderText, marginRight: 5 }}
           />
-          <Text style={{ color: 'white' }}>
+          <Text style={styles.reminderText}>
             Due:{' '}
             {getDueDate({
               id,
@@ -84,25 +79,42 @@ export default function Reminder({
             }).toLocaleString()}
           </Text>
         </View>
-        <View style={{ marginRight: 15 }}>
+        <View style={styles.iconLabel}>
           <FontAwesomeIcon
             icon={faHistory}
-            style={{ color: 'white', marginRight: 5 }}
+            style={{ ...styles.reminderText, marginRight: 5 }}
           />
-          <Text style={{ color: 'white' }}>
+          <Text style={styles.reminderText}>
             {intervalDuration.as(durationBestUnit) + ' ' + durationBestUnit}
           </Text>
         </View>
         {lastCompletion && (
-          <View style={{ marginRight: 15 }}>
+          <View style={styles.iconLabel}>
             <FontAwesomeIcon
               icon={faBackspace}
-              style={{ color: 'white', marginRight: 5 }}
+              style={{ ...styles.reminderText, marginRight: 5 }}
             />
-            <Text style={{ color: 'white' }}>{lastCompletion}</Text>
+            <Text style={styles.reminderText}>{lastCompletion}</Text>
           </View>
         )}
       </View>
     </Pressable>
   );
 }
+
+const styles = StyleSheet.create({
+  reminderPressable: {
+    margin: 5,
+    padding: 10,
+    backgroundColor: 'dodgerblue',
+    borderRadius: 15,
+  },
+  iconLabel: {
+    flex: 1,
+    flexDirection: 'row',
+    marginRight: 15,
+  },
+  reminderText: {
+    color: 'black',
+  },
+});
