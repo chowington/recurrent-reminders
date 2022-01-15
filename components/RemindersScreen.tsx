@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { RemindersContext } from './RemindersProvider';
+import { DateTime } from 'luxon';
 
 interface ReminderScreenProps {
   navigation: any;
@@ -30,16 +31,18 @@ export default function RemindersScreen(props: ReminderScreenProps) {
     []
   );
 
-  const sortedReminders = useMemo(
-    () =>
-      reminders.sort((reminderA, reminderB) =>
-        getDueDate(reminderA)
-          .diffNow()
-          .minus(getDueDate(reminderB).diffNow())
-          .as('days')
-      ),
-    [reminders]
-  );
+  // This change intended to fix reminders with the same due date randomly swapping,
+  // but the problem is still happening. To fix, need to store datetime of reminder
+  // creation and compare those here as a fallback.
+  const sortedReminders = useMemo(() => {
+    const now = DateTime.now();
+    return reminders.sort((reminderA, reminderB) =>
+      getDueDate(reminderA)
+        .diff(now)
+        .minus(getDueDate(reminderB).diff(now))
+        .as('days')
+    );
+  }, [reminders]);
 
   return (
     <View style={{ flex: 1, backgroundColor: 'black', padding: 20 }}>

@@ -2,6 +2,8 @@ import React, { createContext, useState, useEffect } from 'react';
 import { ReminderProps } from './Reminder';
 import uuid from 'react-native-uuid';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import _ from 'lodash';
+import { testReminders } from '../data/testReminders';
 
 const storeData = async (key: string, value: any) => {
   try {
@@ -25,35 +27,51 @@ export const RemindersContext = createContext({
   reminders: [],
   addReminder: (props: Omit<ReminderProps, 'id'>) => {},
   deleteReminder: (id: string) => {},
+  updateReminder: (
+    id: string,
+    newReminderProps: Partial<Omit<ReminderProps, 'id'>>
+  ) => {},
 });
 
 const RemindersProvider = ({ children }) => {
   const [reminders, setReminders] = useState<ReminderProps[]>([]);
+
+  const storeRemindersAndSyncState = (newReminders: ReminderProps[]) => {
+    storeData('reminders', newReminders)
+      .then(() => getData('reminders').then((value) => setReminders(value)))
+      .catch(() => console.error('Error: Could not sync reminders'));
+  };
 
   const addReminder = (props: Omit<ReminderProps, 'id'>) => {
     const newReminder = {
       id: uuid.v4() as string,
       ...props,
     };
-    const newReminders = reminders.concat([newReminder]);
-    storeData('reminders', newReminders)
-      .then(() => getData('reminders').then((value) => setReminders(value)))
-      .catch(() => console.error('Error: Could not add new reminder'));
+    storeRemindersAndSyncState(reminders.concat(newReminder));
   };
 
   const deleteReminder = (id: string) => {
     const newReminders = reminders.filter((reminder) => reminder.id !== id);
-    storeData('reminders', newReminders)
-      .then(() => getData('reminders').then((value) => setReminders(value)))
-      .catch(() => console.error('Error: Could not delete reminder'));
+    storeRemindersAndSyncState(newReminders);
+  };
+
+  const updateReminder = (
+    id: string,
+    newReminderProps: Partial<Omit<ReminderProps, 'id'>>
+  ) => {
+    const [matchedReminders, otherReminders] = _.partition(
+      reminders,
+      (reminder) => reminder.id === id
+    );
+    const updatedReminder = { ...matchedReminders[0], ...newReminderProps };
+    storeRemindersAndSyncState(otherReminders.concat(updatedReminder));
   };
 
   useEffect(() => {
     const getReminders = async () => {
-      // await storeData('reminders', testReminders);
+      await storeData('reminders', testReminders);
       // await storeData('reminders', []);
       const storedReminders = await getData('reminders');
-      // console.log(storedReminders);
       setReminders(storedReminders);
     };
 
@@ -66,6 +84,7 @@ const RemindersProvider = ({ children }) => {
         reminders,
         addReminder,
         deleteReminder,
+        updateReminder,
       }}
     >
       {children}
