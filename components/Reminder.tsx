@@ -36,7 +36,7 @@ const getBestUnit = (duration: Duration) => {
   }
 };
 
-const getDueDate = (reminder: ReminderProps) => {
+export const getDueDate = (reminder: ReminderProps) => {
   const lastCompletion = reminder.lastCompletion
     ? DateTime.fromISO(reminder.lastCompletion)
     : DateTime.now();

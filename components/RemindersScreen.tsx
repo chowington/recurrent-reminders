@@ -1,4 +1,4 @@
-import ReminderComponent, { ReminderProps } from './Reminder';
+import ReminderComponent, { getDueDate, ReminderProps } from './Reminder';
 import {
   Text,
   FlatList,
@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 import { RemindersContext } from './RemindersProvider';
 
 interface ReminderScreenProps {
@@ -28,6 +28,17 @@ export default function RemindersScreen(props: ReminderScreenProps) {
       setModalIsVisible(true);
     },
     []
+  );
+
+  const sortedReminders = useMemo(
+    () =>
+      reminders.sort((reminderA, reminderB) =>
+        getDueDate(reminderA)
+          .diffNow()
+          .minus(getDueDate(reminderB).diffNow())
+          .as('days')
+      ),
+    [reminders]
   );
 
   return (
@@ -53,7 +64,7 @@ export default function RemindersScreen(props: ReminderScreenProps) {
         <Text style={{ color: 'black', fontSize: 16 }}>Add new reminder</Text>
       </Pressable>
       <FlatList
-        data={reminders}
+        data={sortedReminders}
         renderItem={({ item: reminder }) => (
           <ReminderComponent
             {...reminder}
