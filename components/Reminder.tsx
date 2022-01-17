@@ -32,7 +32,7 @@ interface ReminderComponentProps extends ReminderProps {
   onLongPress: () => void;
 }
 
-const getToday = () => DateTime.now().startOf('day');
+export const getToday = () => DateTime.now().startOf('day');
 
 const getBestUnit = (duration: Duration) => {
   for (const timeUnit of durationUnits) {

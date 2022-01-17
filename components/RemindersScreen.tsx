@@ -1,12 +1,15 @@
-import ReminderComponent, { getDueDate, ReminderProps } from './Reminder';
+import ReminderComponent, {
+  getDueDate,
+  getToday,
+  ReminderProps,
+} from './Reminder';
 import {
   Text,
-  FlatList,
+  SectionList,
   Pressable,
   View,
   Modal,
   useWindowDimensions,
-  // Button,
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -32,18 +35,48 @@ export default function RemindersScreen(props: ReminderScreenProps) {
     []
   );
 
-  // This change intended to fix reminders with the same due date randomly swapping,
-  // but the problem is still happening. To fix, need to store datetime of reminder
-  // creation and compare those here as a fallback.
-  const sortedReminders = useMemo(() => {
-    const now = DateTime.now();
-    return reminders.sort((reminderA, reminderB) =>
-      getDueDate(reminderA)
-        .diff(now)
-        .minus(getDueDate(reminderB).diff(now))
-        .as('days')
-    );
-  }, [reminders]);
+  const sections: { [key: string]: ReminderProps[] } = {
+    Today: [],
+    'Next 7 days': [],
+    Later: [],
+  };
+
+  const now = getToday();
+
+  reminders.forEach((reminder) => {
+    const daysFromDueDate = getDueDate(reminder).diff(now).as('days');
+
+    if (daysFromDueDate <= 0) sections['Today'].push(reminder);
+    else if (daysFromDueDate <= 7) sections['Next 7 days'].push(reminder);
+    else sections['Later'].push(reminder);
+  });
+
+  const remindersSortFunction = (
+    reminderA: ReminderProps,
+    reminderB: ReminderProps
+  ) =>
+    getDueDate(reminderA)
+      .diff(now)
+      .minus(getDueDate(reminderB).diff(now))
+      .as('days');
+
+  const sectionObjects = Object.entries(sections).map((entry) => ({
+    title: entry[0],
+    data: entry[1].sort(remindersSortFunction),
+  }));
+
+  // // This change intended to fix reminders with the same due date randomly swapping,
+  // // but the problem is still happening. To fix, need to store datetime of reminder
+  // // creation and compare those here as a fallback.
+  // const sortedReminders = useMemo(() => {
+  //   const now = DateTime.now();
+  //   return reminders.sort((reminderA, reminderB) =>
+  //     getDueDate(reminderA)
+  //       .diff(now)
+  //       .minus(getDueDate(reminderB).diff(now))
+  //       .as('days')
+  //   );
+  // }, [reminders]);
 
   return (
     <View style={{ flex: 1, backgroundColor: 'black', padding: 20 }}>
@@ -67,8 +100,13 @@ export default function RemindersScreen(props: ReminderScreenProps) {
         />
         <Text style={{ color: 'black', fontSize: 16 }}>Add new reminder</Text>
       </Pressable>
-      <FlatList
-        data={sortedReminders}
+      <SectionList
+        sections={sectionObjects}
+        renderSectionHeader={({ section }) => (
+          <Text style={{ color: 'lightslategray', margin: 5 }}>
+            {section.title}
+          </Text>
+        )}
         renderItem={({ item: reminder }) => (
           <ReminderComponent
             {...reminder}
