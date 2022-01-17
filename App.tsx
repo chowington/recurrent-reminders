@@ -1,9 +1,12 @@
-import { View, StatusBar } from 'react-native';
+import { View, StatusBar, NativeModules } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import RemindersScreen from './components/RemindersScreen';
 import AddNewReminderScreen from './components/NewReminderScreen';
 import RemindersProvider from './components/RemindersProvider';
+
+const { NotificationsModule } = NativeModules;
+NotificationsModule.createRemindersNotification();
 
 const Stack = createNativeStackNavigator();
 
