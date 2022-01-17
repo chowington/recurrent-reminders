@@ -4,7 +4,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import RemindersScreen from './components/RemindersScreen';
 import AddNewReminderScreen from './components/NewReminderScreen';
 import RemindersProvider from './components/RemindersProvider';
+import { setUpNotifications } from './utils/notifications';
 
+setUpNotifications();
 const Stack = createNativeStackNavigator();
 
 export default function App() {
