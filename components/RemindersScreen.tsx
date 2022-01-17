@@ -6,12 +6,14 @@ import {
   View,
   Modal,
   useWindowDimensions,
+  // Button,
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { RemindersContext } from './RemindersProvider';
 import { DateTime } from 'luxon';
+// import notifee from '@notifee/react-native';
 
 interface ReminderScreenProps {
   navigation: any;
@@ -44,8 +46,27 @@ export default function RemindersScreen(props: ReminderScreenProps) {
     );
   }, [reminders]);
 
+  // async function displayNotification() {
+  //   // Create a channel
+  //   const channelId = await notifee.createChannel({
+  //     id: 'default',
+  //     name: 'Default Channel',
+  //   });
+
+  //   // Display a notification
+  //   await notifee.displayNotification({
+  //     title: 'Notification Title',
+  //     body: 'Main body content of the notification',
+  //     android: {
+  //       channelId,
+  //       // smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
+  //     },
+  //   });
+  // }
+
   return (
     <View style={{ flex: 1, backgroundColor: 'black', padding: 20 }}>
+      {/* <Button onPress={displayNotification} title='Send notification!' /> */}
       <Pressable
         onPress={() => props.navigation.navigate('Add new reminder')}
         android_ripple={{ color: 'black' }}

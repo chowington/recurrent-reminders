@@ -69,7 +69,7 @@ const RemindersProvider = ({ children }) => {
 
   useEffect(() => {
     const getReminders = async () => {
-      await storeData('reminders', testReminders);
+      // await storeData('reminders', testReminders);
       // await storeData('reminders', []);
       const storedReminders = await getData('reminders');
       setReminders(storedReminders);
