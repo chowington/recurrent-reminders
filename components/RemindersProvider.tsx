@@ -4,6 +4,7 @@ import { ReminderProps } from './Reminder';
 import uuid from 'react-native-uuid';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import _ from 'lodash';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { testReminders } from '../data/testReminders';
 
 // if (
@@ -47,7 +48,7 @@ export const RemindersContext = createContext({
   ) => {
     console.error('Context value not set');
   },
-  /* eslint-disable @typescript-eslint/no-unused-vars */
+  /* eslint-enable @typescript-eslint/no-unused-vars */
 });
 
 const RemindersProvider = ({ children }: { children: React.ReactNode }) => {
@@ -92,7 +93,7 @@ const RemindersProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const getReminders = async () => {
-      await storeData('reminders', testReminders);
+      // await storeData('reminders', testReminders);
       // await storeData('reminders', []);
       const storedReminders = await getData('reminders');
       setReminders(storedReminders);
