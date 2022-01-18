@@ -14,7 +14,7 @@ export default function AddNewReminderScreen({ navigation }) {
       interval: { days: parseInt(interval) },
     });
     navigation.goBack();
-  }, [taskName, interval]);
+  }, [addReminder, taskName, interval]);
 
   return (
     <View style={{ flex: 1, backgroundColor: 'black', padding: 20 }}>

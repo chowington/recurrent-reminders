@@ -21,7 +21,7 @@ const storeData = async (key: string, value: any) => {
     const jsonValue = JSON.stringify(value);
     await AsyncStorage.setItem(key, jsonValue);
   } catch (e) {
-    console.log('Failed to save data');
+    console.error('Failed to save data');
   }
 };
 
@@ -30,7 +30,7 @@ const getData = async (key: string) => {
     const jsonValue = await AsyncStorage.getItem(key);
     return jsonValue != null ? JSON.parse(jsonValue) : null;
   } catch (e) {
-    console.log('Failed to retrieve data');
+    console.error('Failed to retrieve data');
   }
 };
 
@@ -49,12 +49,10 @@ const RemindersProvider = ({ children }) => {
 
   const storeRemindersAndSyncState = async (newReminders: ReminderProps[]) => {
     try {
-      console.log({ newReminders });
       await storeData('reminders', newReminders);
       const storedReminders = await getData('reminders');
       // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
       setReminders(storedReminders);
-      console.log({ storedReminders });
     } catch (e) {
       console.error('Error: Could not sync reminders');
       console.error(e);

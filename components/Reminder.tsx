@@ -87,7 +87,7 @@ export default function Reminder({
       updateReminder(id, { lastCompletion: now.toISODate() });
       setIsChecked(false);
     }, 1500);
-  }, [id]);
+  }, [updateReminder, id]);
 
   return (
     <Pressable
