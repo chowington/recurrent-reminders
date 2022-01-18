@@ -1,3 +1,4 @@
+import { useCallback, useContext, useState } from 'react';
 import ReminderComponent, {
   getDueDate,
   getToday,
@@ -13,17 +14,16 @@ import {
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { useCallback, useContext, useMemo, useState } from 'react';
 import { RemindersContext } from './RemindersProvider';
-import { DateTime } from 'luxon';
 
 interface ReminderScreenProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   navigation: any;
 }
 
 export default function RemindersScreen(props: ReminderScreenProps) {
   const { reminders, deleteReminder } = useContext(RemindersContext);
-  const { height: windowHeight, width: windowWidth } = useWindowDimensions();
+  const { width: windowWidth } = useWindowDimensions();
   const [modalIsVisible, setModalIsVisible] = useState(false);
   const [modalReminder, setModalReminder] = useState<ReminderProps>(null);
 
@@ -137,7 +137,8 @@ export default function RemindersScreen(props: ReminderScreenProps) {
             }}
           >
             <Text style={{ fontSize: 24, marginBottom: 30 }}>
-              Delete reminder for task '{modalReminder.title}'?
+              Delete reminder{' '}
+              <Text style={{ fontWeight: 'bold' }}>{modalReminder.title}</Text>?
             </Text>
             <View
               style={{

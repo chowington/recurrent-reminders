@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { LayoutAnimation, Platform, UIManager } from 'react-native';
+// import { LayoutAnimation, Platform, UIManager } from 'react-native';
 import { ReminderProps } from './Reminder';
 import uuid from 'react-native-uuid';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,9 +13,7 @@ import { testReminders } from '../data/testReminders';
 //   UIManager.setLayoutAnimationEnabledExperimental(true);
 // }
 
-// I'm getting some data weirdness. Previous updates are getting lost/reverted
-// by new updates. Need to check store logic.
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const storeData = async (key: string, value: any) => {
   try {
     const jsonValue = JSON.stringify(value);
@@ -36,15 +34,23 @@ const getData = async (key: string) => {
 
 export const RemindersContext = createContext({
   reminders: [],
-  addReminder: (props: Omit<ReminderProps, 'id'>) => {},
-  deleteReminder: (id: string) => {},
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  addReminder: (props: Omit<ReminderProps, 'id'>) => {
+    console.error('Context value not set');
+  },
+  deleteReminder: (id: string) => {
+    console.error('Context value not set');
+  },
   updateReminder: (
     id: string,
     newReminderProps: Partial<Omit<ReminderProps, 'id'>>
-  ) => {},
+  ) => {
+    console.error('Context value not set');
+  },
+  /* eslint-disable @typescript-eslint/no-unused-vars */
 });
 
-const RemindersProvider = ({ children }) => {
+const RemindersProvider = ({ children }: { children: React.ReactNode }) => {
   const [reminders, setReminders] = useState<ReminderProps[]>([]);
 
   const storeRemindersAndSyncState = async (newReminders: ReminderProps[]) => {
@@ -86,7 +92,7 @@ const RemindersProvider = ({ children }) => {
 
   useEffect(() => {
     const getReminders = async () => {
-      // await storeData('reminders', testReminders);
+      await storeData('reminders', testReminders);
       // await storeData('reminders', []);
       const storedReminders = await getData('reminders');
       setReminders(storedReminders);

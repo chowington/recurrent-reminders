@@ -78,7 +78,7 @@ export default function Reminder({
 }: ReminderComponentProps) {
   const { updateReminder } = useContext(RemindersContext);
   const [isChecked, setIsChecked] = useState(false);
-  const { height: windowHeight, width: windowWidth } = useWindowDimensions();
+  const { width: windowWidth } = useWindowDimensions();
 
   const onCompletion = useCallback(() => {
     const now = DateTime.now();
@@ -91,7 +91,7 @@ export default function Reminder({
 
   return (
     <Pressable
-      onPress={() => {}}
+      // onPress={() => {}}
       onLongPress={onLongPress}
       android_ripple={{ color: 'black' }}
       style={{

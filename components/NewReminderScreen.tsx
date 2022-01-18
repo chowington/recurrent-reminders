@@ -2,10 +2,15 @@ import { useCallback, useContext, useState } from 'react';
 import { TextInput, View, Text, Pressable } from 'react-native';
 import { RemindersContext } from './RemindersProvider';
 
-export default function AddNewReminderScreen({ navigation }) {
+export default function AddNewReminderScreen({
+  navigation,
+}: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  navigation: any;
+}) {
   const [taskName, setTaskName] = useState('');
   const [interval, setInterval] = useState('');
-  const [isValid, setIsValid] = useState(false);
+  // const [isValid, setIsValid] = useState(false);
   const { addReminder } = useContext(RemindersContext);
 
   const onCreateReminderPress = useCallback(() => {
