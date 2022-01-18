@@ -1,9 +1,20 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { LayoutAnimation, Platform, UIManager } from 'react-native';
 import { ReminderProps } from './Reminder';
 import uuid from 'react-native-uuid';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import _ from 'lodash';
 import { testReminders } from '../data/testReminders';
+
+// if (
+//   Platform.OS === 'android' &&
+//   UIManager.setLayoutAnimationEnabledExperimental
+// ) {
+//   UIManager.setLayoutAnimationEnabledExperimental(true);
+// }
+
+// I'm getting some data weirdness. Previous updates are getting lost/reverted
+// by new updates. Need to check store logic.
 
 const storeData = async (key: string, value: any) => {
   try {
@@ -36,10 +47,18 @@ export const RemindersContext = createContext({
 const RemindersProvider = ({ children }) => {
   const [reminders, setReminders] = useState<ReminderProps[]>([]);
 
-  const storeRemindersAndSyncState = (newReminders: ReminderProps[]) => {
-    storeData('reminders', newReminders)
-      .then(() => getData('reminders').then((value) => setReminders(value)))
-      .catch(() => console.error('Error: Could not sync reminders'));
+  const storeRemindersAndSyncState = async (newReminders: ReminderProps[]) => {
+    try {
+      console.log({ newReminders });
+      await storeData('reminders', newReminders);
+      const storedReminders = await getData('reminders');
+      // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+      setReminders(storedReminders);
+      console.log({ storedReminders });
+    } catch (e) {
+      console.error('Error: Could not sync reminders');
+      console.error(e);
+    }
   };
 
   const addReminder = (props: Omit<ReminderProps, 'id'>) => {
