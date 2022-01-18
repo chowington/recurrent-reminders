@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-// import { LayoutAnimation, Platform, UIManager } from 'react-native';
+import { LayoutAnimation, Platform, UIManager } from 'react-native';
 import { ReminderProps } from './Reminder';
 import uuid from 'react-native-uuid';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,12 +7,12 @@ import _ from 'lodash';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { testReminders } from '../data/testReminders';
 
-// if (
-//   Platform.OS === 'android' &&
-//   UIManager.setLayoutAnimationEnabledExperimental
-// ) {
-//   UIManager.setLayoutAnimationEnabledExperimental(true);
-// }
+if (
+  Platform.OS === 'android' &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const storeData = async (key: string, value: any) => {
@@ -58,7 +58,7 @@ const RemindersProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       await storeData('reminders', newReminders);
       const storedReminders = await getData('reminders');
-      // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       setReminders(storedReminders);
     } catch (e) {
       console.error('Error: Could not sync reminders');
