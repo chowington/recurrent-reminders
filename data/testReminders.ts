@@ -4,6 +4,7 @@ export const testReminders: ReminderProps[] = [
   {
     id: '83ca3c76-8bd1-42ae-86e7-60a8149b6a0e',
     title: 'Do great work',
+    startDate: '2022-01-20',
     interval: {
       days: 1,
     },
@@ -11,6 +12,7 @@ export const testReminders: ReminderProps[] = [
   {
     id: '4fcbd93e-b9a5-438a-99fb-01b4e0f513cb',
     title: 'Exercise',
+    startDate: '2022-01-12',
     interval: {
       days: 2,
     },
@@ -22,6 +24,7 @@ export const testReminders: ReminderProps[] = [
     interval: {
       days: 2,
     },
+    startDate: '2022-12-11',
     lastCompletion: '2021-12-20',
   },
   {
@@ -30,11 +33,13 @@ export const testReminders: ReminderProps[] = [
     interval: {
       days: 3,
     },
+    startDate: '2021-12-22',
     lastCompletion: '2022-01-03',
   },
   {
     id: '87202216-c555-4d0e-80fb-0eb90256dfb5',
     title: 'Play guitar',
+    startDate: '2022-01-15',
     interval: {
       days: 7,
     },
@@ -42,6 +47,7 @@ export const testReminders: ReminderProps[] = [
   {
     id: 'bff17177-b5be-4ba0-803b-b16ad76999fa',
     title: 'Work on app',
+    startDate: '2022-01-11',
     interval: {
       days: 2,
     },
@@ -53,6 +59,7 @@ export const testReminders: ReminderProps[] = [
     interval: {
       days: 28,
     },
+    startDate: '2022-01-01',
     lastCompletion: '2022-01-01',
   },
   {
@@ -61,6 +68,7 @@ export const testReminders: ReminderProps[] = [
     interval: {
       days: 7,
     },
+    startDate: '2022-01-05',
     lastCompletion: '2022-01-13',
   },
 ];

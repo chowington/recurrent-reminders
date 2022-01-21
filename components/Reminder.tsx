@@ -25,6 +25,7 @@ export interface ReminderProps {
   id: string;
   title: string;
   interval: DurationLikeObject;
+  startDate: string;
   lastCompletion?: string;
 }
 
@@ -41,12 +42,10 @@ const getBestUnit = (duration: Duration) => {
   }
 };
 
-export const getDueDate = (reminder: ReminderProps) => {
-  const lastCompletion = reminder.lastCompletion
-    ? DateTime.fromISO(reminder.lastCompletion)
-    : getToday();
-  return lastCompletion.plus(reminder.interval);
-};
+export const getDueDate = (reminder: ReminderProps) =>
+  reminder.lastCompletion
+    ? DateTime.fromISO(reminder.lastCompletion).plus(reminder.interval)
+    : DateTime.fromISO(reminder.startDate);
 
 const makeFriendlyDueDateMessage = (dueDate: DateTime) => {
   const daysFromNow = dueDate.diff(getToday()).as('days');
@@ -73,6 +72,7 @@ export default function Reminder({
   id,
   title,
   interval,
+  startDate,
   lastCompletion,
   onLongPress,
 }: ReminderComponentProps) {
@@ -135,6 +135,7 @@ export default function Reminder({
                   id,
                   title,
                   interval,
+                  startDate,
                   lastCompletion,
                 })
               )}

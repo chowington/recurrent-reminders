@@ -65,19 +65,6 @@ export default function RemindersScreen(props: ReminderScreenProps) {
     data: entry[1].sort(remindersSortFunction),
   }));
 
-  // // This change intended to fix reminders with the same due date randomly swapping,
-  // // but the problem is still happening. To fix, need to store datetime of reminder
-  // // creation and compare those here as a fallback.
-  // const sortedReminders = useMemo(() => {
-  //   const now = DateTime.now();
-  //   return reminders.sort((reminderA, reminderB) =>
-  //     getDueDate(reminderA)
-  //       .diff(now)
-  //       .minus(getDueDate(reminderB).diff(now))
-  //       .as('days')
-  //   );
-  // }, [reminders]);
-
   return (
     <View style={{ flex: 1, backgroundColor: 'black', padding: 20 }}>
       <Pressable
