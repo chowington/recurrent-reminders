@@ -9,14 +9,15 @@ export default function AddNewReminderScreen({
   navigation: any;
 }) {
   const [taskName, setTaskName] = useState('');
-  const [interval, setInterval] = useState('');
-  // const [isValid, setIsValid] = useState(false);
+  const [interval, setInterval] = useState<number>();
   const { addReminder } = useContext(RemindersContext);
+
+  const isValid = taskName.length > 0 && interval > 0;
 
   const onCreateReminderPress = useCallback(() => {
     addReminder({
       title: taskName,
-      interval: { days: parseInt(interval) },
+      interval: { days: interval },
     });
     navigation.goBack();
   }, [addReminder, taskName, interval, navigation]);
@@ -44,8 +45,8 @@ export default function AddNewReminderScreen({
         Interval (days)
       </Text>
       <TextInput
-        value={interval}
-        onChangeText={setInterval}
+        value={interval ? interval.toString() : undefined}
+        onChangeText={(value) => setInterval(parseInt(value))}
         keyboardType='numeric'
         style={{
           color: 'white',
@@ -61,10 +62,11 @@ export default function AddNewReminderScreen({
       <Pressable
         onPress={onCreateReminderPress}
         android_ripple={{ color: 'black' }}
+        disabled={!isValid}
         style={{
           width: '100%',
           height: 70,
-          backgroundColor: 'lightblue',
+          backgroundColor: isValid ? 'lightblue' : 'dimgrey',
           borderRadius: 15,
           justifyContent: 'center',
           alignItems: 'center',
