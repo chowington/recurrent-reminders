@@ -4,11 +4,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import RemindersScreen from './components/RemindersScreen';
 import AddNewReminderScreen from './components/NewReminderScreen';
 import RemindersProvider from './components/RemindersProvider';
-// import { setUpNotifications } from './utils/notifications';
+import { setUpNotifications } from './utils/notifications';
 import { registerTranslation, en } from 'react-native-paper-dates';
 import { Provider as PaperProvider } from 'react-native-paper';
 
-// setUpNotifications();
+setUpNotifications();
 const Stack = createNativeStackNavigator();
 registerTranslation('en', en);
 

@@ -3,8 +3,13 @@ import notifee, {
   TimestampTrigger,
   TriggerType,
 } from '@notifee/react-native';
+import { DateTime } from 'luxon';
 
 export async function setUpNotifications() {
+  // const notifications = await notifee.getTriggerNotifications();
+  // console.log(notifications);
+  // return;
+
   await notifee.cancelAllNotifications();
 
   const oldChannels = await notifee.getChannels();
@@ -15,16 +20,21 @@ export async function setUpNotifications() {
     name: 'Daily Reminder',
   });
 
-  const now = new Date(Date.now());
-  const triggerTimeToday = new Date(now.setHours(9, 0, 0, 0));
+  const now = DateTime.now();
+  const triggerTimeToday = now.set({
+    hour: 9,
+    minute: 0,
+    second: 0,
+    millisecond: 0,
+  });
   const triggerTime =
-    triggerTimeToday > now
-      ? triggerTimeToday.getTime()
-      : triggerTimeToday.setDate(now.getDate() + 1);
+    triggerTimeToday.diff(now).as('milliseconds') > 0
+      ? triggerTimeToday
+      : triggerTimeToday.plus({ days: 1 });
 
   const dailyTrigger: TimestampTrigger = {
     type: TriggerType.TIMESTAMP,
-    timestamp: triggerTime,
+    timestamp: triggerTime.toMillis(),
     repeatFrequency: RepeatFrequency.DAILY,
   };
 
