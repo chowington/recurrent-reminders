@@ -4,7 +4,7 @@ export const testReminders: ReminderProps[] = [
   {
     id: '83ca3c76-8bd1-42ae-86e7-60a8149b6a0e',
     title: 'Do great work',
-    startDate: '2022-01-20',
+    startDate: '2022-01-02',
     interval: {
       days: 1,
     },
@@ -34,7 +34,7 @@ export const testReminders: ReminderProps[] = [
       days: 3,
     },
     startDate: '2021-12-22',
-    lastCompletion: '2022-01-03',
+    lastCompletion: '2022-01-20',
   },
   {
     id: '87202216-c555-4d0e-80fb-0eb90256dfb5',
@@ -69,6 +69,6 @@ export const testReminders: ReminderProps[] = [
       days: 7,
     },
     startDate: '2022-01-05',
-    lastCompletion: '2022-01-13',
+    lastCompletion: '2022-01-17',
   },
 ];
