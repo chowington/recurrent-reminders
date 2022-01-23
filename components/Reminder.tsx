@@ -50,11 +50,11 @@ export const getDueDate = (reminder: ReminderProps) =>
 const makeFriendlyDueDateMessage = (dueDate: DateTime) => {
   const daysFromNow = dueDate.diff(getToday()).as('days');
 
-  if (daysFromNow >= 2) return `Due in ${daysFromNow} days`;
-  if (daysFromNow == 1) return 'Due tomorrow';
-  if (daysFromNow == 0) return 'Due today';
-  if (daysFromNow == -1) return 'Due yesterday';
-  else return `Due ${-daysFromNow} days ago`;
+  if (daysFromNow >= 2) return `In ${daysFromNow} days`;
+  if (daysFromNow == 1) return 'Tomorrow';
+  if (daysFromNow == 0) return 'Today';
+  if (daysFromNow == -1) return 'Yesterday';
+  return -daysFromNow + ' days ago';
 };
 
 const makeFriendlyIntervalMessage = (interval: DurationLikeObject) => {
