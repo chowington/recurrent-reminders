@@ -4,8 +4,13 @@ import { ReminderProps } from './Reminder';
 import uuid from 'react-native-uuid';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import _ from 'lodash';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { testReminders } from '../data/testReminders';
+
+const devStorageLocation = 'testReminders';
+const prodStorageLocation = 'reminders';
+/* eslint-enable @typescript-eslint/no-unused-vars */
+const storageLocation = devStorageLocation;
 
 if (
   Platform.OS === 'android' &&
@@ -56,8 +61,8 @@ const RemindersProvider = ({ children }: { children: React.ReactNode }) => {
 
   const storeRemindersAndSyncState = async (newReminders: ReminderProps[]) => {
     try {
-      await storeData('reminders', newReminders);
-      const storedReminders = await getData('reminders');
+      await storeData(storageLocation, newReminders);
+      const storedReminders = await getData(storageLocation);
       LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
       setReminders(storedReminders);
     } catch (e) {
@@ -93,9 +98,10 @@ const RemindersProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const getReminders = async () => {
-      // await storeData('reminders', testReminders);
-      // await storeData('reminders', []);
-      const storedReminders = await getData('reminders');
+      // await storeData(devStorageLocation, []);
+      // await storeData(devStorageLocation, testReminders);
+      const storedReminders = await getData(storageLocation);
+      // console.log(storedReminders);
       setReminders(storedReminders);
     };
 
