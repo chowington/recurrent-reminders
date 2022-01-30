@@ -4,7 +4,7 @@ import { DateTime } from 'luxon';
 const daysAgo = (days: number) =>
   DateTime.now().startOf('day').minus({ days: days }).toISODate();
 
-export const testReminders: ReminderProps[] = [
+export const makeTestReminders = (): ReminderProps[] => [
   {
     id: '83ca3c76-8bd1-42ae-86e7-60a8149b6a0e',
     title: 'Do great work',

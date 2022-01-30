@@ -5,7 +5,7 @@ import uuid from 'react-native-uuid';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import _ from 'lodash';
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { testReminders } from '../data/testReminders';
+import { makeTestReminders } from '../data/testReminders';
 
 const devStorageLocation = 'testReminders';
 const prodStorageLocation = 'reminders';
@@ -99,7 +99,7 @@ const RemindersProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const getReminders = async () => {
       // await storeData(devStorageLocation, []);
-      // await storeData(devStorageLocation, testReminders);
+      // await storeData(devStorageLocation, makeTestReminders());
       const storedReminders = await getData(storageLocation);
       // console.log(storedReminders);
       setReminders(storedReminders);
