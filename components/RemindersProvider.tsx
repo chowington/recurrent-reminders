@@ -10,7 +10,9 @@ import { makeTestReminders } from '../data/testReminders';
 const devStorageLocation = 'testReminders';
 const prodStorageLocation = 'reminders';
 /* eslint-enable @typescript-eslint/no-unused-vars */
+
 const storageLocation = devStorageLocation;
+// const storageLocation = prodStorageLocation;
 
 if (
   Platform.OS === 'android' &&
@@ -53,11 +55,16 @@ export const RemindersContext = createContext({
   ) => {
     console.error('Context value not set');
   },
+  editingReminder: {} as ReminderProps,
+  setEditingReminder: (reminder: ReminderProps) => {
+    console.error('Context value not set');
+  },
   /* eslint-enable @typescript-eslint/no-unused-vars */
 });
 
 const RemindersProvider = ({ children }: { children: React.ReactNode }) => {
   const [reminders, setReminders] = useState<ReminderProps[]>([]);
+  const [editingReminder, setEditingReminder] = useState<ReminderProps>();
 
   const storeRemindersAndSyncState = async (newReminders: ReminderProps[]) => {
     try {
@@ -115,6 +122,8 @@ const RemindersProvider = ({ children }: { children: React.ReactNode }) => {
         addReminder,
         deleteReminder,
         updateReminder,
+        editingReminder,
+        setEditingReminder,
       }}
     >
       {children}

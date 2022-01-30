@@ -2,19 +2,29 @@ import { useCallback, useContext, useState } from 'react';
 import { TextInput, View, Text, Pressable } from 'react-native';
 import { RemindersContext } from './RemindersProvider';
 import { DatePickerModal } from 'react-native-paper-dates';
-import { DateTime } from 'luxon';
+import { DateTime, Duration } from 'luxon';
+import { ReminderProps } from './Reminder';
 
-export default function AddNewReminderScreen({
-  navigation,
-}: {
+interface ReminderFormProps {
+  reminder?: ReminderProps;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   navigation: any;
-}) {
-  const [taskName, setTaskName] = useState('');
-  const [interval, setInterval] = useState<number | undefined>();
-  const [startDate, setStartDate] = useState<Date>(new Date(Date.now()));
+}
+
+export default function ReminderForm(props: ReminderFormProps) {
+  const [taskName, setTaskName] = useState(props.reminder?.title ?? '');
+  const [interval, setInterval] = useState<number | undefined>(
+    props.reminder
+      ? Duration.fromObject(props.reminder.interval).as('days')
+      : undefined
+  );
+  const [startDate, setStartDate] = useState<Date>(
+    props.reminder
+      ? DateTime.fromISO(props.reminder.startDate).toJSDate()
+      : new Date(Date.now())
+  );
   const [datePickerIsVisible, setDatePickerIsVisible] = useState(false);
-  const { addReminder } = useContext(RemindersContext);
+  const { addReminder, updateReminder } = useContext(RemindersContext);
 
   const isValid = taskName.length > 0 && interval > 0;
 
@@ -30,14 +40,29 @@ export default function AddNewReminderScreen({
     [setDatePickerIsVisible, setStartDate]
   );
 
-  const onCreateReminderPress = useCallback(() => {
-    addReminder({
+  const onComplete = useCallback(() => {
+    const newReminder = {
       title: taskName,
       interval: { days: interval },
       startDate: DateTime.fromJSDate(startDate).toISODate(),
-    });
-    navigation.goBack();
-  }, [addReminder, taskName, interval, startDate, navigation]);
+    };
+
+    if (props.reminder) {
+      updateReminder(props.reminder.id, newReminder);
+    } else {
+      addReminder(newReminder);
+    }
+
+    props.navigation.goBack();
+  }, [
+    props.reminder,
+    updateReminder,
+    addReminder,
+    taskName,
+    interval,
+    startDate,
+    props.navigation,
+  ]);
 
   return (
     <View style={{ flex: 1, backgroundColor: 'black', padding: 20 }}>
@@ -107,7 +132,7 @@ export default function AddNewReminderScreen({
         uppercase={false}
       />
       <Pressable
-        onPress={onCreateReminderPress}
+        onPress={onComplete}
         android_ripple={{ color: 'black' }}
         disabled={!isValid}
         style={{
@@ -120,7 +145,9 @@ export default function AddNewReminderScreen({
           marginTop: 20,
         }}
       >
-        <Text style={{ color: 'black', fontSize: 16 }}>Create reminder</Text>
+        <Text style={{ color: 'black', fontSize: 16 }}>
+          {props.reminder ? 'Update reminder' : 'Create reminder'}
+        </Text>
       </Pressable>
     </View>
   );

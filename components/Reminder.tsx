@@ -30,6 +30,7 @@ export interface ReminderProps {
 }
 
 interface ReminderComponentProps extends ReminderProps {
+  onPress: () => void;
   onLongPress: () => void;
 }
 
@@ -74,6 +75,7 @@ export default function Reminder({
   interval,
   startDate,
   lastCompletion,
+  onPress,
   onLongPress,
 }: ReminderComponentProps) {
   const { updateReminder } = useContext(RemindersContext);
@@ -91,7 +93,7 @@ export default function Reminder({
 
   return (
     <Pressable
-      // onPress={() => {}}
+      onPress={onPress}
       onLongPress={onLongPress}
       android_ripple={{ color: 'black' }}
       style={{

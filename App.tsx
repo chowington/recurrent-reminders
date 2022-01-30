@@ -1,8 +1,9 @@
 import { View, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import RemindersScreen from './components/RemindersScreen';
-import AddNewReminderScreen from './components/NewReminderScreen';
+import RemindersScreen from './screens/RemindersScreen';
+import NewReminderScreen from './screens/NewReminderScreen';
+import UpdateReminderScreen from './screens/UpdateReminderScreen';
 import RemindersProvider from './components/RemindersProvider';
 import { setUpNotifications } from './utils/notifications';
 import { registerTranslation, en } from 'react-native-paper-dates';
@@ -31,9 +32,10 @@ export default function App() {
                 component={RemindersScreen}
                 options={{ headerShown: false }}
               />
+              <Stack.Screen name='Reminder' component={UpdateReminderScreen} />
               <Stack.Screen
                 name='Add new reminder'
-                component={AddNewReminderScreen}
+                component={NewReminderScreen}
               />
             </Stack.Navigator>
           </View>

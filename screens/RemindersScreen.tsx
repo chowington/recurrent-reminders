@@ -3,7 +3,7 @@ import ReminderComponent, {
   getDueDate,
   getToday,
   ReminderProps,
-} from './Reminder';
+} from '../components/Reminder';
 import {
   Text,
   SectionList,
@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { RemindersContext } from './RemindersProvider';
+import { RemindersContext } from '../components/RemindersProvider';
 
 interface ReminderScreenProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,10 +22,19 @@ interface ReminderScreenProps {
 }
 
 export default function RemindersScreen(props: ReminderScreenProps) {
-  const { reminders, deleteReminder } = useContext(RemindersContext);
+  const { reminders, deleteReminder, setEditingReminder } =
+    useContext(RemindersContext);
   const { width: windowWidth } = useWindowDimensions();
   const [modalIsVisible, setModalIsVisible] = useState(false);
   const [modalReminder, setModalReminder] = useState<ReminderProps>(null);
+
+  const createPressHandler = useCallback(
+    (reminder: ReminderProps) => () => {
+      setEditingReminder(reminder);
+      props.navigation.navigate('Reminder');
+    },
+    [setEditingReminder, props.navigation]
+  );
 
   const createLongPressHandler = useCallback(
     (reminder: ReminderProps) => () => {
@@ -98,6 +107,7 @@ export default function RemindersScreen(props: ReminderScreenProps) {
           <ReminderComponent
             {...reminder}
             key={reminder.id}
+            onPress={createPressHandler(reminder)}
             onLongPress={createLongPressHandler(reminder)}
           />
         )}
