@@ -10,6 +10,10 @@ export async function setUpNotifications() {
   // console.log(notifications);
   // return;
 
+  notifee.onBackgroundEvent(async (event) => {
+    console.log({ event });
+  });
+
   await notifee.cancelAllNotifications();
 
   const oldChannels = await notifee.getChannels();

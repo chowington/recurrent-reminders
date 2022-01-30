@@ -9,8 +9,8 @@ import { registerTranslation, en } from 'react-native-paper-dates';
 import { Provider as PaperProvider } from 'react-native-paper';
 
 setUpNotifications();
-const Stack = createNativeStackNavigator();
 registerTranslation('en', en);
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
