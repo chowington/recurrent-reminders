@@ -45,6 +45,7 @@ export default function RemindersScreen(props: ReminderScreenProps) {
   );
 
   const sections: { [key: string]: ReminderProps[] } = {
+    'Top 3 today': [],
     Today: [],
     'Next 7 days': [],
     Later: [],
@@ -52,13 +53,9 @@ export default function RemindersScreen(props: ReminderScreenProps) {
 
   const now = getToday();
 
-  reminders.forEach((reminder) => {
-    const daysFromDueDate = getDueDate(reminder).diff(now).as('days');
-
-    if (daysFromDueDate <= 0) sections['Today'].push(reminder);
-    else if (daysFromDueDate <= 7) sections['Next 7 days'].push(reminder);
-    else sections['Later'].push(reminder);
-  });
+  // const numCompletedToday = reminders.filter(
+  //   (reminder) => reminder.lastCompletion === now.toISODate()
+  // ).length;
 
   const remindersSortFunction = (
     reminderA: ReminderProps,
@@ -69,9 +66,24 @@ export default function RemindersScreen(props: ReminderScreenProps) {
       .minus(getDueDate(reminderB).diff(now))
       .as('days');
 
+  const sortedReminders = reminders.sort(remindersSortFunction);
+
+  sortedReminders.forEach((reminder) => {
+    const daysFromDueDate = getDueDate(reminder).diff(now).as('days');
+
+    if (daysFromDueDate <= 0) sections['Today'].push(reminder);
+    else if (daysFromDueDate <= 7) sections['Next 7 days'].push(reminder);
+    else sections['Later'].push(reminder);
+  });
+
+  if (sections['Today'].length > 3) {
+    sections['Top 3 today'] = sections['Today'].slice(0, 3);
+    sections['Today'] = sections['Today'].slice(3);
+  }
+
   const sectionObjects = Object.entries(sections).map((entry) => ({
     title: entry[0],
-    data: entry[1].sort(remindersSortFunction),
+    data: entry[1],
   }));
 
   return (
@@ -98,11 +110,13 @@ export default function RemindersScreen(props: ReminderScreenProps) {
       </Pressable>
       <SectionList
         sections={sectionObjects}
-        renderSectionHeader={({ section }) => (
-          <Text style={{ color: 'lightslategray', margin: 5 }}>
-            {section.title}
-          </Text>
-        )}
+        renderSectionHeader={({ section }) =>
+          section.data.length > 0 ? (
+            <Text style={{ color: 'lightslategray', margin: 5 }}>
+              {section.title}
+            </Text>
+          ) : null
+        }
         renderItem={({ item: reminder }) => (
           <ReminderComponent
             {...reminder}

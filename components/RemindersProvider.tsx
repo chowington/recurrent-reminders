@@ -41,7 +41,7 @@ const getData = async (key: string) => {
 };
 
 export const RemindersContext = createContext({
-  reminders: [],
+  reminders: [] as ReminderProps[],
   /* eslint-disable @typescript-eslint/no-unused-vars */
   addReminder: (props: Omit<ReminderProps, 'id'>) => {
     console.error('Context value not set');
