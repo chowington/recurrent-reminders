@@ -117,12 +117,13 @@ export default function RemindersScreen(props: ReminderScreenProps) {
             </Text>
           ) : null
         }
-        renderItem={({ item: reminder }) => (
+        renderItem={({ item: reminder, section }) => (
           <ReminderComponent
             {...reminder}
             key={reminder.id}
             onPress={createPressHandler(reminder)}
             onLongPress={createLongPressHandler(reminder)}
+            showDueDate={!['Top 3 today', 'Today'].includes(section.title)}
           />
         )}
         style={{ height: '80%' }}

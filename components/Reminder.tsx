@@ -32,6 +32,7 @@ export interface ReminderProps {
 interface ReminderComponentProps extends ReminderProps {
   onPress: () => void;
   onLongPress: () => void;
+  showDueDate?: boolean;
 }
 
 export const getToday = () => DateTime.now().startOf('day');
@@ -77,6 +78,7 @@ export default function Reminder({
   lastCompletion,
   onPress,
   onLongPress,
+  showDueDate = true,
 }: ReminderComponentProps) {
   const { updateReminder } = useContext(RemindersContext);
   const [isChecked, setIsChecked] = useState(false);
@@ -126,23 +128,25 @@ export default function Reminder({
           {title}
         </Text>
         <View style={{ margin: 2, flexDirection: 'row', flexWrap: 'wrap' }}>
-          <View style={styles.iconLabel}>
-            <FontAwesomeIcon
-              icon={faClock}
-              style={{ ...styles.reminderText, marginRight: 5 }}
-            />
-            <Text style={styles.reminderText}>
-              {makeFriendlyDueDateMessage(
-                getDueDate({
-                  id,
-                  title,
-                  interval,
-                  startDate,
-                  lastCompletion,
-                })
-              )}
-            </Text>
-          </View>
+          {showDueDate && (
+            <View style={styles.iconLabel}>
+              <FontAwesomeIcon
+                icon={faClock}
+                style={{ ...styles.reminderText, marginRight: 5 }}
+              />
+              <Text style={styles.reminderText}>
+                {makeFriendlyDueDateMessage(
+                  getDueDate({
+                    id,
+                    title,
+                    interval,
+                    startDate,
+                    lastCompletion,
+                  })
+                )}
+              </Text>
+            </View>
+          )}
           <View style={styles.iconLabel}>
             <FontAwesomeIcon
               icon={faHistory}
