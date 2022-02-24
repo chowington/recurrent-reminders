@@ -127,7 +127,14 @@ export default function Reminder({
         <Text style={{ ...styles.reminderText, fontSize: 20, marginBottom: 5 }}>
           {title}
         </Text>
-        <View style={{ margin: 2, flexDirection: 'row', flexWrap: 'wrap' }}>
+        <View
+          style={{
+            width: windowWidth - 110,
+            margin: 2,
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+          }}
+        >
           {showDueDate && (
             <View style={styles.iconLabel}>
               <FontAwesomeIcon
