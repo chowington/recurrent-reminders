@@ -11,8 +11,8 @@ const devStorageLocation = 'testReminders';
 const prodStorageLocation = 'reminders';
 /* eslint-enable @typescript-eslint/no-unused-vars */
 
-const storageLocation = devStorageLocation;
-// const storageLocation = prodStorageLocation;
+// const storageLocation = devStorageLocation;
+const storageLocation = prodStorageLocation;
 
 if (
   Platform.OS === 'android' &&
